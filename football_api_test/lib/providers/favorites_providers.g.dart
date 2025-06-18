@@ -6,7 +6,7 @@ part of 'favorites_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$favoriteTeamsHash() => r'fd8622c0c49593b6f849775f50d86b915aeae411';
+String _$favoriteTeamsHash() => r'829174a28420d3926fe14a55a08966da2ecec685';
 
 /// Provider that gets all favorite teams from the database
 ///
@@ -26,7 +26,7 @@ final favoriteTeamsProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef FavoriteTeamsRef = AutoDisposeFutureProviderRef<List<FavoriteTeam>>;
-String _$isTeamFavoriteHash() => r'918c4c7a07ae732d84dbf746621cfbc8595d3d8a';
+String _$isTeamFavoriteHash() => r'0c1aefdecc4a1cadf709c1413ba1cb05938eb4f2';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -180,7 +180,7 @@ class _IsTeamFavoriteProviderElement
 }
 
 String _$favoriteTeamsCountHash() =>
-    r'863eff57e75877d2734fa173990170e1677db8ff';
+    r'6713aa1142014e8e92c7ee0356a6a9e44295e83f';
 
 /// Provider that gets the count of favorite teams
 ///

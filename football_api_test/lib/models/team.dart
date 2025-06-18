@@ -49,4 +49,4 @@ class Team {
 
   @override
   String toString() => 'Team(id: $id, name: $name, shortName: $shortName)';
-} 
+}

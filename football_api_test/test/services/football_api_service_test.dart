@@ -77,8 +77,9 @@ void main() {
           ]
         }''';
 
-        when(mockClient.get(any, headers: anyNamed('headers')))
-            .thenAnswer((_) async => http.Response(mockResponse, 200));
+        when(
+          mockClient.get(any, headers: anyNamed('headers')),
+        ).thenAnswer((_) async => http.Response(mockResponse, 200));
 
         // Act
         final teams = await service.getPremierLeagueTeams();
@@ -93,27 +94,39 @@ void main() {
 
       test('should throw ApiException when rate limit is exceeded', () async {
         // Arrange
-        when(mockClient.get(any, headers: anyNamed('headers')))
-            .thenAnswer((_) async => http.Response('Rate limit exceeded', 429));
+        when(
+          mockClient.get(any, headers: anyNamed('headers')),
+        ).thenAnswer((_) async => http.Response('Rate limit exceeded', 429));
 
         // Act & Assert
         expect(
           () => service.getPremierLeagueTeams(),
-          throwsA(isA<ApiException>()
-              .having((e) => e.message, 'message', contains('Rate limit'))),
+          throwsA(
+            isA<ApiException>().having(
+              (e) => e.message,
+              'message',
+              contains('Rate limit'),
+            ),
+          ),
         );
       });
 
       test('should throw ApiException when network error occurs', () async {
         // Arrange
-        when(mockClient.get(any, headers: anyNamed('headers')))
-            .thenThrow(const SocketException('No internet connection'));
+        when(
+          mockClient.get(any, headers: anyNamed('headers')),
+        ).thenThrow(const SocketException('No internet connection'));
 
         // Act & Assert
         expect(
           () => service.getPremierLeagueTeams(),
-          throwsA(isA<ApiException>()
-              .having((e) => e.message, 'message', contains('No internet'))),
+          throwsA(
+            isA<ApiException>().having(
+              (e) => e.message,
+              'message',
+              contains('No internet'),
+            ),
+          ),
         );
       });
     });
@@ -124,7 +137,7 @@ void main() {
         // 1. Mock the API response for a specific team ID
         // 2. Verify the correct team data is returned
         // 3. Test error cases (404, 429, network errors)
-        
+
         // For now, we'll test that the method exists and can be called
         expect(service.getTeamById, isA<Function>());
       });
@@ -144,4 +157,4 @@ void main() {
       });
     });
   });
-} 
+}

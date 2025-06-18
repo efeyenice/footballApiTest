@@ -51,7 +51,7 @@ class Match {
   int get hashCode => id.hashCode;
 
   @override
-  String toString() => 
+  String toString() =>
       'Match(id: $id, ${homeTeam.shortName} vs ${awayTeam.shortName}, $status)';
 
   /// Helper method to get formatted date
@@ -65,4 +65,4 @@ class Match {
 
   /// Helper method to check if match is live
   bool get isLive => ['IN_PLAY', 'PAUSED', 'HALF_TIME'].contains(status);
-} 
+}

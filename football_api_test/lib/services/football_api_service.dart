@@ -16,17 +16,17 @@ class FootballApiService {
 
   /// Common headers for all API requests
   Map<String, String> get _headers => {
-        'X-Auth-Token': _apiKey,
-        'Content-Type': 'application/json',
-      };
+    'X-Auth-Token': _apiKey,
+    'Content-Type': 'application/json',
+  };
 
   /// Get all Premier League teams
   Future<List<Team>> getPremierLeagueTeams() async {
     final url = Uri.parse('$_baseUrl/competitions/$_premierLeagueCode/teams');
-    
+
     try {
       final response = await _client.get(url, headers: _headers);
-      
+
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
         final teamsResponse = TeamsResponse.fromJson(jsonData);
@@ -51,10 +51,10 @@ class FootballApiService {
   /// Get team details by ID
   Future<Team> getTeamById(int teamId) async {
     final url = Uri.parse('$_baseUrl/teams/$teamId');
-    
+
     try {
       final response = await _client.get(url, headers: _headers);
-      
+
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
         return Team.fromJson(jsonData);
@@ -76,16 +76,17 @@ class FootballApiService {
   }
 
   /// Get upcoming matches for a team
-  Future<List<Match>> getTeamUpcomingMatches(int teamId, {int limit = 5}) async {
-    final url = Uri.parse('$_baseUrl/teams/$teamId/matches')
-        .replace(queryParameters: {
-      'status': 'SCHEDULED,TIMED',
-      'limit': limit.toString(),
-    });
-    
+  Future<List<Match>> getTeamUpcomingMatches(
+    int teamId, {
+    int limit = 5,
+  }) async {
+    final url = Uri.parse('$_baseUrl/teams/$teamId/matches').replace(
+      queryParameters: {'status': 'SCHEDULED,TIMED', 'limit': limit.toString()},
+    );
+
     try {
       final response = await _client.get(url, headers: _headers);
-      
+
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
         final matchesResponse = MatchesResponse.fromJson(jsonData);
@@ -106,16 +107,17 @@ class FootballApiService {
   }
 
   /// Get finished matches for a team
-  Future<List<Match>> getTeamFinishedMatches(int teamId, {int limit = 10}) async {
-    final url = Uri.parse('$_baseUrl/teams/$teamId/matches')
-        .replace(queryParameters: {
-      'status': 'FINISHED',
-      'limit': limit.toString(),
-    });
-    
+  Future<List<Match>> getTeamFinishedMatches(
+    int teamId, {
+    int limit = 10,
+  }) async {
+    final url = Uri.parse('$_baseUrl/teams/$teamId/matches').replace(
+      queryParameters: {'status': 'FINISHED', 'limit': limit.toString()},
+    );
+
     try {
       final response = await _client.get(url, headers: _headers);
-      
+
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
         final matchesResponse = MatchesResponse.fromJson(jsonData);
@@ -155,9 +157,9 @@ class FootballApiService {
 /// Custom exception for API errors
 class ApiException implements Exception {
   final String message;
-  
+
   const ApiException(this.message);
-  
+
   @override
   String toString() => 'ApiException: $message';
-} 
+}

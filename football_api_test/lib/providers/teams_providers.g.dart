@@ -7,7 +7,7 @@ part of 'teams_providers.dart';
 // **************************************************************************
 
 String _$premierLeagueTeamsHash() =>
-    r'6b234f0193fb29778e4e80d67fad67870daf004e';
+    r'7a1784bd3c2157b997ad1e89123702b18c3200eb';
 
 /// Provider that fetches all Premier League teams
 ///
@@ -27,7 +27,7 @@ final premierLeagueTeamsProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef PremierLeagueTeamsRef = AutoDisposeFutureProviderRef<List<Team>>;
-String _$teamByIdHash() => r'a27dce3d8b4464f23958a354c78a4d12ba886b08';
+String _$teamByIdHash() => r'bc13c7c7bc1f571439e48f21639115895acefc3c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -175,7 +175,7 @@ class _TeamByIdProviderElement extends AutoDisposeFutureProviderElement<Team>
 }
 
 String _$teamUpcomingMatchesHash() =>
-    r'864bce6852e97336dc92cf051a3bf81923d1ac78';
+    r'dc69fd132b77cf607300bbcd431a79599a2bc913';
 
 /// Provider that gets upcoming matches for a team
 ///
@@ -309,7 +309,7 @@ class _TeamUpcomingMatchesProviderElement
 }
 
 String _$teamFinishedMatchesHash() =>
-    r'e53d5856b917a063c0d67c3e98a43590a57d4cdd';
+    r'3d675bd152ca2602ec1cbfb55804e70f5e0a38b3';
 
 /// Provider that gets finished matches for a team
 ///
@@ -442,7 +442,7 @@ class _TeamFinishedMatchesProviderElement
   int get teamId => (origin as TeamFinishedMatchesProvider).teamId;
 }
 
-String _$teamMatchesPlayedHash() => r'78ca9ef6ba4bc54eef0e1d38dd588ff0805b33e7';
+String _$teamMatchesPlayedHash() => r'edd3db7c48792620ef6e5a9b7b154beca2c7d3fd';
 
 /// Provider that gets the number of matches played for a team
 ///

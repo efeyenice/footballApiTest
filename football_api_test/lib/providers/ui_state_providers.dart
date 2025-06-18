@@ -18,7 +18,8 @@ class ViewModeNotifier extends _$ViewModeNotifier {
 
   void setListView() => state = ViewMode.list;
   void setGridView() => state = ViewMode.grid;
-  void toggle() => state = state == ViewMode.list ? ViewMode.grid : ViewMode.list;
+  void toggle() =>
+      state = state == ViewMode.list ? ViewMode.grid : ViewMode.list;
 }
 
 /// Provider for sorting order
@@ -28,7 +29,9 @@ class SortOrderNotifier extends _$SortOrderNotifier {
   SortOrder build() => SortOrder.nameAsc;
 
   void setSortOrder(SortOrder order) => state = order;
-  void toggleSort() => state = state == SortOrder.nameAsc ? SortOrder.nameDesc : SortOrder.nameAsc;
+  void toggleSort() => state = state == SortOrder.nameAsc
+      ? SortOrder.nameDesc
+      : SortOrder.nameAsc;
 }
 
 /// Provider for search/filter text
@@ -43,7 +46,7 @@ class SearchTextNotifier extends _$SearchTextNotifier {
 
 /// Provider that combines teams with filtering and sorting
 @riverpod
-Future<List<Team>> filteredAndSortedTeams(FilteredAndSortedTeamsRef ref) async {
+Future<List<Team>> filteredAndSortedTeams(ref) async {
   // Get teams from the Premier League teams provider
   final teams = await ref.watch(premierLeagueTeamsProvider.future);
   final searchText = ref.watch(searchTextNotifierProvider);
@@ -53,7 +56,7 @@ Future<List<Team>> filteredAndSortedTeams(FilteredAndSortedTeamsRef ref) async {
   var filteredTeams = teams.where((team) {
     if (searchText.isEmpty) return true;
     return team.name.toLowerCase().contains(searchText.toLowerCase()) ||
-           team.shortName.toLowerCase().contains(searchText.toLowerCase());
+        team.shortName.toLowerCase().contains(searchText.toLowerCase());
   }).toList();
 
   // Sort teams based on sort order
@@ -86,4 +89,4 @@ class ErrorMessageNotifier extends _$ErrorMessageNotifier {
 
   void setError(String? error) => state = error;
   void clearError() => state = null;
-} 
+}

@@ -19,7 +19,10 @@ void main() {
     // Verify that our app starts with the teams list screen.
     expect(find.text('Premier League Teams'), findsOneWidget);
     expect(find.text('Loading teams...'), findsOneWidget);
-    expect(find.text('Football data provided by the Football-Data.org API'), findsOneWidget);
+    expect(
+      find.text('Football data provided by the Football-Data.org API'),
+      findsOneWidget,
+    );
 
     // Verify the favorites button is present.
     expect(find.byIcon(Icons.favorite), findsOneWidget);

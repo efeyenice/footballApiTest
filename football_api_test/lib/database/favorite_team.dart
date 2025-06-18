@@ -9,8 +9,9 @@ class FavoriteTeams extends Table {
   TextColumn get venue => text().nullable().named('venue')();
   IntColumn get founded => integer().nullable().named('founded')();
   TextColumn get clubColors => text().nullable().named('club_colors')();
-  DateTimeColumn get addedAt => dateTime().named('added_at').withDefault(currentDateAndTime)();
+  DateTimeColumn get addedAt =>
+      dateTime().named('added_at').withDefault(currentDateAndTime)();
 
   @override
   Set<Column> get primaryKey => {id};
-} 
+}

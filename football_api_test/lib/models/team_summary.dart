@@ -34,4 +34,4 @@ class TeamSummary {
 
   @override
   String toString() => 'TeamSummary(id: $id, name: $name)';
-} 
+}

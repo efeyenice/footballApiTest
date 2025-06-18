@@ -7,10 +7,7 @@ class ScoreTime {
   final int? home;
   final int? away;
 
-  const ScoreTime({
-    this.home,
-    this.away,
-  });
+  const ScoreTime({this.home, this.away});
 
   factory ScoreTime.fromJson(Map<String, dynamic> json) =>
       _$ScoreTimeFromJson(json);
@@ -35,6 +32,6 @@ class Score {
   Map<String, dynamic> toJson() => _$ScoreToJson(this);
 
   @override
-  String toString() => 
+  String toString() =>
       'Score(winner: $winner, fullTime: ${fullTime.home}-${fullTime.away})';
-} 
+}

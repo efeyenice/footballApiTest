@@ -25,16 +25,18 @@ class AppDatabase extends _$AppDatabase {
 
   /// Add a team to favorites
   Future<int> addFavoriteTeam(Team team) async {
-    return into(favoriteTeams).insert(FavoriteTeamsCompanion(
-      id: Value(team.id),
-      name: Value(team.name),
-      shortName: Value(team.shortName),
-      tla: Value(team.tla),
-      crest: Value(team.crest),
-      venue: Value(team.venue),
-      founded: Value(team.founded),
-      clubColors: Value(team.clubColors),
-    ));
+    return into(favoriteTeams).insert(
+      FavoriteTeamsCompanion(
+        id: Value(team.id),
+        name: Value(team.name),
+        shortName: Value(team.shortName),
+        tla: Value(team.tla),
+        crest: Value(team.crest),
+        venue: Value(team.venue),
+        founded: Value(team.founded),
+        clubColors: Value(team.clubColors),
+      ),
+    );
   }
 
   /// Remove a team from favorites
@@ -87,4 +89,4 @@ LazyDatabase _openConnection() {
 
     return NativeDatabase.createInBackground(file);
   });
-} 
+}

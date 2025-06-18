@@ -29,11 +29,9 @@ class TeamsResponse {
 class MatchesResponse {
   final List<Match> matches;
 
-  const MatchesResponse({
-    required this.matches,
-  });
+  const MatchesResponse({required this.matches});
 
   factory MatchesResponse.fromJson(Map<String, dynamic> json) =>
       _$MatchesResponseFromJson(json);
   Map<String, dynamic> toJson() => _$MatchesResponseToJson(this);
-} 
+}

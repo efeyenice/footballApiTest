@@ -6,7 +6,7 @@ part 'app_providers.g.dart';
 
 /// Provider for the app database instance
 @Riverpod(keepAlive: true)
-AppDatabase appDatabase(AppDatabaseRef ref) {
+AppDatabase appDatabase(ref) {
   final database = AppDatabase();
   ref.onDispose(() => database.close());
   return database;
@@ -14,8 +14,8 @@ AppDatabase appDatabase(AppDatabaseRef ref) {
 
 /// Provider for the football API service
 @Riverpod(keepAlive: true)
-FootballApiService footballApiService(FootballApiServiceRef ref) {
+FootballApiService footballApiService(ref) {
   final service = FootballApiService();
   ref.onDispose(() => service.dispose());
   return service;
-} 
+}

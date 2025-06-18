@@ -2,4 +2,4 @@
 export 'app_providers.dart';
 export 'teams_providers.dart';
 export 'favorites_providers.dart';
-export 'ui_state_providers.dart'; 
+export 'ui_state_providers.dart';

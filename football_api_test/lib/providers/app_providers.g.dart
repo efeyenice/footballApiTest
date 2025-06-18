@@ -6,7 +6,7 @@ part of 'app_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$appDatabaseHash() => r'651c6ffed771b8ec2727c83b3e385e6d6dc58d58';
+String _$appDatabaseHash() => r'a8c0dfc43c4e4e2c28d772a481aa329966ab3660';
 
 /// Provider for the app database instance
 ///
@@ -26,7 +26,7 @@ final appDatabaseProvider = Provider<AppDatabase>.internal(
 // ignore: unused_element
 typedef AppDatabaseRef = ProviderRef<AppDatabase>;
 String _$footballApiServiceHash() =>
-    r'526a813bdaf9668aeb310efdd0ecba5e22ef7806';
+    r'3f6f2dfce09da5658930c608f12f00d7420dc7b8';
 
 /// Provider for the football API service
 ///
