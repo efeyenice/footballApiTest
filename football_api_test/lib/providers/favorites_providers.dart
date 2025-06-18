@@ -17,26 +17,31 @@ Future<List<FavoriteTeam>> favoriteTeams(ref) async {
 @riverpod
 Future<List<Team>> favoriteTeamsAsTeams(ref) async {
   final favoriteTeams = await ref.watch(favoriteTeamsProvider.future);
-  return favoriteTeams.map((favoriteTeam) => Team(
-    id: favoriteTeam.id,
-    name: favoriteTeam.name,
-    shortName: favoriteTeam.shortName,
-    tla: favoriteTeam.tla,
-    crest: favoriteTeam.crest,
-    address: null, // Not stored in favorites
-    website: null, // Not stored in favorites
-    founded: favoriteTeam.founded,
-    clubColors: favoriteTeam.clubColors,
-    venue: favoriteTeam.venue,
-    area: const Area( // Default area - not stored in favorites
-      id: 0,
-      name: 'Unknown',
-      code: 'UNK',
-      flag: '',
-    ),
-    runningCompetitions: [], // Not applicable for favorites
-    lastUpdated: DateTime.now().toIso8601String(),
-  )).toList();
+  return favoriteTeams
+      .map(
+        (favoriteTeam) => Team(
+          id: favoriteTeam.id,
+          name: favoriteTeam.name,
+          shortName: favoriteTeam.shortName,
+          tla: favoriteTeam.tla,
+          crest: favoriteTeam.crest,
+          address: null, // Not stored in favorites
+          website: null, // Not stored in favorites
+          founded: favoriteTeam.founded,
+          clubColors: favoriteTeam.clubColors,
+          venue: favoriteTeam.venue,
+          area: const Area(
+            // Default area - not stored in favorites
+            id: 0,
+            name: 'Unknown',
+            code: 'UNK',
+            flag: '',
+          ),
+          runningCompetitions: [], // Not applicable for favorites
+          lastUpdated: DateTime.now().toIso8601String(),
+        ),
+      )
+      .toList();
 }
 
 /// Provider that checks if a specific team is favorite

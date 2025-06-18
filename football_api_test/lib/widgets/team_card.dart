@@ -29,19 +29,21 @@ class TeamCard extends ConsumerWidget {
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: isGridView ? _buildGridLayout(
-            context, 
-            theme, 
-            isFavoriteAsync, 
-            matchesPlayedAsync, 
-            ref,
-          ) : _buildListLayout(
-            context, 
-            theme, 
-            isFavoriteAsync, 
-            matchesPlayedAsync, 
-            ref,
-          ),
+          child: isGridView
+              ? _buildGridLayout(
+                  context,
+                  theme,
+                  isFavoriteAsync,
+                  matchesPlayedAsync,
+                  ref,
+                )
+              : _buildListLayout(
+                  context,
+                  theme,
+                  isFavoriteAsync,
+                  matchesPlayedAsync,
+                  ref,
+                ),
         ),
       ),
     );
@@ -59,7 +61,7 @@ class TeamCard extends ConsumerWidget {
         // Team crest
         _buildTeamCrest(60),
         const SizedBox(width: 16),
-        
+
         // Team info
         Expanded(
           child: Column(
@@ -85,7 +87,7 @@ class TeamCard extends ConsumerWidget {
             ],
           ),
         ),
-        
+
         // Favorite button
         _buildFavoriteButton(context, isFavoriteAsync, ref),
       ],
@@ -105,7 +107,7 @@ class TeamCard extends ConsumerWidget {
         // Team crest
         _buildTeamCrest(80),
         const SizedBox(height: 12),
-        
+
         // Team name
         Text(
           team.shortName,
@@ -117,11 +119,11 @@ class TeamCard extends ConsumerWidget {
           overflow: TextOverflow.ellipsis,
         ),
         const SizedBox(height: 8),
-        
+
         // Matches played
         _buildMatchesPlayed(matchesPlayedAsync, theme),
         const SizedBox(height: 8),
-        
+
         // Favorite button
         _buildFavoriteButton(context, isFavoriteAsync, ref),
       ],
@@ -134,10 +136,7 @@ class TeamCard extends ConsumerWidget {
       height: size,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: Colors.grey.shade300,
-          width: 1,
-        ),
+        border: Border.all(color: Colors.grey.shade300, width: 1),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(7),
@@ -163,16 +162,15 @@ class TeamCard extends ConsumerWidget {
     );
   }
 
-  Widget _buildMatchesPlayed(AsyncValue<int> matchesPlayedAsync, ThemeData theme) {
+  Widget _buildMatchesPlayed(
+    AsyncValue<int> matchesPlayedAsync,
+    ThemeData theme,
+  ) {
     return matchesPlayedAsync.when(
       data: (matchesPlayed) => Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            Icons.sports_soccer,
-            size: 16,
-            color: theme.colorScheme.primary,
-          ),
+          Icon(Icons.sports_soccer, size: 16, color: theme.colorScheme.primary),
           const SizedBox(width: 4),
           Text(
             '$matchesPlayed matches',
@@ -205,11 +203,7 @@ class TeamCard extends ConsumerWidget {
       error: (_, __) => Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            Icons.error_outline,
-            size: 16,
-            color: theme.colorScheme.error,
-          ),
+          Icon(Icons.error_outline, size: 16, color: theme.colorScheme.error),
           const SizedBox(width: 4),
           Text(
             'Error',
@@ -230,7 +224,9 @@ class TeamCard extends ConsumerWidget {
     return isFavoriteAsync.when(
       data: (isFavorite) => IconButton(
         onPressed: () async {
-          final favoritesNotifier = ref.read(favoritesNotifierProvider.notifier);
+          final favoritesNotifier = ref.read(
+            favoritesNotifierProvider.notifier,
+          );
           await favoritesNotifier.toggleFavorite(team);
         },
         icon: Icon(
@@ -259,4 +255,4 @@ class TeamCard extends ConsumerWidget {
       ),
     );
   }
-} 
+}

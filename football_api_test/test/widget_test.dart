@@ -18,7 +18,7 @@ void main() {
 
     // Verify that our app starts with the teams list screen.
     expect(find.text('Premier League Teams'), findsOneWidget);
-    expect(find.text('Loading teams...'), findsOneWidget);
+    expect(find.text('Loading Premier League teams...'), findsOneWidget);
     expect(
       find.text('Football data provided by the Football-Data.org API'),
       findsOneWidget,
@@ -26,5 +26,12 @@ void main() {
 
     // Verify the favorites button is present.
     expect(find.byIcon(Icons.favorite), findsOneWidget);
+
+    // Verify search bar is present.
+    expect(find.text('Search teams...'), findsOneWidget);
+
+    // Verify view mode toggle and sort buttons are present.
+    expect(find.byIcon(Icons.sort), findsOneWidget);
+    expect(find.byIcon(Icons.grid_view), findsOneWidget);
   });
 }

@@ -6,11 +6,7 @@ import 'screens/team_detail_screen.dart';
 import 'screens/favorites_screen.dart';
 
 void main() {
-  runApp(
-    const ProviderScope(
-      child: FootballApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: FootballApp()));
 }
 
 class FootballApp extends StatelessWidget {
@@ -41,10 +37,7 @@ class FootballApp extends StatelessWidget {
 
 final GoRouter _router = GoRouter(
   routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const TeamsListScreen(),
-    ),
+    GoRoute(path: '/', builder: (context, state) => const TeamsListScreen()),
     GoRoute(
       path: '/team/:teamId',
       builder: (context, state) {

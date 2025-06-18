@@ -158,9 +158,8 @@ class FavoritesScreen extends ConsumerWidget {
                     children: [
                       Text(
                         'Your Favorite Teams',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       Text(
                         '${teams.length} team${teams.length == 1 ? '' : 's'} in your collection',
@@ -199,10 +198,14 @@ class FavoritesScreen extends ConsumerWidget {
         Container(
           padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+            color: Theme.of(
+              context,
+            ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
             border: Border(
               top: BorderSide(
-                color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+                color: Theme.of(
+                  context,
+                ).colorScheme.outline.withValues(alpha: 0.2),
               ),
             ),
           ),
@@ -235,7 +238,7 @@ class FavoritesScreen extends ConsumerWidget {
             FilledButton(
               onPressed: () async {
                 Navigator.of(context).pop();
-                
+
                 // Show loading snackbar
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -247,9 +250,13 @@ class FavoritesScreen extends ConsumerWidget {
                 }
 
                 try {
-                  final favoritesNotifier = ref.read(favoritesNotifierProvider.notifier);
-                  final favoriteTeams = await ref.read(favoriteTeamsAsTeamsProvider.future);
-                  
+                  final favoritesNotifier = ref.read(
+                    favoritesNotifierProvider.notifier,
+                  );
+                  final favoriteTeams = await ref.read(
+                    favoriteTeamsAsTeamsProvider.future,
+                  );
+
                   // Remove all teams one by one
                   for (final team in favoriteTeams) {
                     await favoritesNotifier.removeFavorite(team.id);
@@ -285,4 +292,4 @@ class FavoritesScreen extends ConsumerWidget {
       },
     );
   }
-} 
+}

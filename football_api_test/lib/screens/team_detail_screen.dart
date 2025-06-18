@@ -13,7 +13,9 @@ class TeamDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final teamAsync = ref.watch(teamByIdProvider(int.parse(teamId)));
-    final isFavoriteAsync = ref.watch(isTeamFavoriteProvider(int.parse(teamId)));
+    final isFavoriteAsync = ref.watch(
+      isTeamFavoriteProvider(int.parse(teamId)),
+    );
 
     return Scaffold(
       body: teamAsync.when(
@@ -71,7 +73,9 @@ class TeamDetailScreen extends ConsumerWidget {
     Team team,
     AsyncValue<bool> isFavoriteAsync,
   ) {
-    final upcomingMatchesAsync = ref.watch(teamUpcomingMatchesProvider(team.id));
+    final upcomingMatchesAsync = ref.watch(
+      teamUpcomingMatchesProvider(team.id),
+    );
     final theme = Theme.of(context);
 
     return CustomScrollView(
@@ -145,14 +149,18 @@ class TeamDetailScreen extends ConsumerWidget {
             isFavoriteAsync.when(
               data: (isFavorite) => IconButton(
                 onPressed: () async {
-                  final favoritesNotifier = ref.read(favoritesNotifierProvider.notifier);
+                  final favoritesNotifier = ref.read(
+                    favoritesNotifierProvider.notifier,
+                  );
                   await favoritesNotifier.toggleFavorite(team);
                 },
                 icon: Icon(
                   isFavorite ? Icons.favorite : Icons.favorite_border,
                   color: isFavorite ? Colors.red : Colors.white,
                 ),
-                tooltip: isFavorite ? 'Remove from favorites' : 'Add to favorites',
+                tooltip: isFavorite
+                    ? 'Remove from favorites'
+                    : 'Add to favorites',
               ),
               loading: () => const Padding(
                 padding: EdgeInsets.all(12.0),
@@ -167,10 +175,7 @@ class TeamDetailScreen extends ConsumerWidget {
               ),
               error: (_, __) => IconButton(
                 onPressed: null,
-                icon: Icon(
-                  Icons.error_outline,
-                  color: theme.colorScheme.error,
-                ),
+                icon: Icon(Icons.error_outline, color: theme.colorScheme.error),
               ),
             ),
           ],
@@ -290,7 +295,9 @@ class TeamDetailScreen extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+                    color: theme.colorScheme.surfaceContainerHighest.withValues(
+                      alpha: 0.3,
+                    ),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
@@ -318,11 +325,7 @@ class TeamDetailScreen extends ConsumerWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(
-          icon,
-          size: 20,
-          color: theme.colorScheme.primary,
-        ),
+        Icon(icon, size: 20, color: theme.colorScheme.primary),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
@@ -335,10 +338,7 @@ class TeamDetailScreen extends ConsumerWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              Text(
-                value,
-                style: theme.textTheme.bodyMedium,
-              ),
+              Text(value, style: theme.textTheme.bodyMedium),
             ],
           ),
         ),
@@ -359,10 +359,7 @@ class TeamDetailScreen extends ConsumerWidget {
                 color: theme.colorScheme.onSurfaceVariant,
               ),
               const SizedBox(height: 16),
-              Text(
-                'No upcoming matches',
-                style: theme.textTheme.titleMedium,
-              ),
+              Text('No upcoming matches', style: theme.textTheme.titleMedium),
               Text(
                 'Check back later for new fixtures',
                 style: theme.textTheme.bodySmall?.copyWith(
@@ -382,8 +379,10 @@ class TeamDetailScreen extends ConsumerWidget {
 
   Widget _buildMatchCard(Match match, ThemeData theme) {
     final matchDate = DateTime.parse(match.utcDate);
-    final formattedDate = "${matchDate.day}/${matchDate.month}/${matchDate.year}";
-    final formattedTime = "${matchDate.hour.toString().padLeft(2, '0')}:${matchDate.minute.toString().padLeft(2, '0')}";
+    final formattedDate =
+        "${matchDate.day}/${matchDate.month}/${matchDate.year}";
+    final formattedTime =
+        "${matchDate.hour.toString().padLeft(2, '0')}:${matchDate.minute.toString().padLeft(2, '0')}";
 
     return Card(
       margin: const EdgeInsets.only(bottom: 8.0),
@@ -411,7 +410,7 @@ class TeamDetailScreen extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 12),
-            
+
             // Teams
             Row(
               children: [
@@ -438,19 +437,16 @@ class TeamDetailScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
-                
+
                 // VS
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   child: Text(
                     'VS',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                 ),
-                
+
                 // Away team
                 Expanded(
                   child: Column(
@@ -481,4 +477,4 @@ class TeamDetailScreen extends ConsumerWidget {
       ),
     );
   }
-} 
+}

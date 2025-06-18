@@ -19,7 +19,8 @@ class _TeamsListScreenState extends ConsumerState<TeamsListScreen> {
   void initState() {
     super.initState();
     _searchController.addListener(() {
-      ref.read(searchTextNotifierProvider.notifier)
+      ref
+          .read(searchTextNotifierProvider.notifier)
           .setSearchText(_searchController.text);
     });
   }
@@ -61,7 +62,7 @@ class _TeamsListScreenState extends ConsumerState<TeamsListScreen> {
               onPressed: () => context.push('/favorites'),
             ),
           ),
-          
+
           // Sort button
           PopupMenuButton<SortOrder>(
             icon: const Icon(Icons.sort),
@@ -76,8 +77,8 @@ class _TeamsListScreenState extends ConsumerState<TeamsListScreen> {
                   children: [
                     Icon(
                       Icons.sort_by_alpha,
-                      color: sortOrder == SortOrder.nameAsc 
-                          ? Theme.of(context).colorScheme.primary 
+                      color: sortOrder == SortOrder.nameAsc
+                          ? Theme.of(context).colorScheme.primary
                           : null,
                     ),
                     const SizedBox(width: 8),
@@ -91,8 +92,8 @@ class _TeamsListScreenState extends ConsumerState<TeamsListScreen> {
                   children: [
                     Icon(
                       Icons.sort_by_alpha,
-                      color: sortOrder == SortOrder.nameDesc 
-                          ? Theme.of(context).colorScheme.primary 
+                      color: sortOrder == SortOrder.nameDesc
+                          ? Theme.of(context).colorScheme.primary
                           : null,
                     ),
                     const SizedBox(width: 8),
@@ -102,7 +103,7 @@ class _TeamsListScreenState extends ConsumerState<TeamsListScreen> {
               ),
             ],
           ),
-          
+
           // View mode toggle
           IconButton(
             icon: Icon(
@@ -130,7 +131,9 @@ class _TeamsListScreenState extends ConsumerState<TeamsListScreen> {
                     icon: const Icon(Icons.clear),
                     onPressed: () {
                       _searchController.clear();
-                      ref.read(searchTextNotifierProvider.notifier).clearSearch();
+                      ref
+                          .read(searchTextNotifierProvider.notifier)
+                          .clearSearch();
                     },
                   ),
               ],
@@ -139,7 +142,7 @@ class _TeamsListScreenState extends ConsumerState<TeamsListScreen> {
               },
             ),
           ),
-          
+
           // Teams list/grid
           Expanded(
             child: teamsAsync.when(
@@ -189,15 +192,19 @@ class _TeamsListScreenState extends ConsumerState<TeamsListScreen> {
               ),
             ),
           ),
-          
+
           // Footer with attribution
           Container(
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+              color: Theme.of(
+                context,
+              ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
               border: Border(
                 top: BorderSide(
-                  color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.outline.withValues(alpha: 0.2),
                 ),
               ),
             ),
@@ -279,4 +286,4 @@ class _TeamsListScreenState extends ConsumerState<TeamsListScreen> {
       );
     }
   }
-} 
+}
