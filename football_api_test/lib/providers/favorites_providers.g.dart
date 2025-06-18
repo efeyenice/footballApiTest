@@ -26,6 +26,27 @@ final favoriteTeamsProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef FavoriteTeamsRef = AutoDisposeFutureProviderRef<List<FavoriteTeam>>;
+String _$favoriteTeamsAsTeamsHash() =>
+    r'f68ab49be2d57df902908e40cee0ceeaacf0b482';
+
+/// Provider that converts favorite teams to Team objects for UI
+///
+/// Copied from [favoriteTeamsAsTeams].
+@ProviderFor(favoriteTeamsAsTeams)
+final favoriteTeamsAsTeamsProvider =
+    AutoDisposeFutureProvider<List<Team>>.internal(
+      favoriteTeamsAsTeams,
+      name: r'favoriteTeamsAsTeamsProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$favoriteTeamsAsTeamsHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef FavoriteTeamsAsTeamsRef = AutoDisposeFutureProviderRef<List<Team>>;
 String _$isTeamFavoriteHash() => r'0c1aefdecc4a1cadf709c1413ba1cb05938eb4f2';
 
 /// Copied from Dart SDK

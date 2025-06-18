@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../models/team.dart';
+import '../models/area.dart';
 import '../database/app_database.dart';
 import 'app_providers.dart';
 
@@ -10,6 +11,32 @@ part 'favorites_providers.g.dart';
 Future<List<FavoriteTeam>> favoriteTeams(ref) async {
   final database = ref.watch(appDatabaseProvider);
   return database.getAllFavoriteTeams();
+}
+
+/// Provider that converts favorite teams to Team objects for UI
+@riverpod
+Future<List<Team>> favoriteTeamsAsTeams(ref) async {
+  final favoriteTeams = await ref.watch(favoriteTeamsProvider.future);
+  return favoriteTeams.map((favoriteTeam) => Team(
+    id: favoriteTeam.id,
+    name: favoriteTeam.name,
+    shortName: favoriteTeam.shortName,
+    tla: favoriteTeam.tla,
+    crest: favoriteTeam.crest,
+    address: null, // Not stored in favorites
+    website: null, // Not stored in favorites
+    founded: favoriteTeam.founded,
+    clubColors: favoriteTeam.clubColors,
+    venue: favoriteTeam.venue,
+    area: const Area( // Default area - not stored in favorites
+      id: 0,
+      name: 'Unknown',
+      code: 'UNK',
+      flag: '',
+    ),
+    runningCompetitions: [], // Not applicable for favorites
+    lastUpdated: DateTime.now().toIso8601String(),
+  )).toList();
 }
 
 /// Provider that checks if a specific team is favorite
@@ -46,6 +73,7 @@ class FavoritesNotifier extends _$FavoritesNotifier {
     // Also refresh related providers
     ref.invalidate(isTeamFavoriteProvider(team.id));
     ref.invalidate(favoriteTeamsCountProvider);
+    ref.invalidate(favoriteTeamsAsTeamsProvider);
   }
 
   /// Add team to favorites
@@ -57,6 +85,7 @@ class FavoritesNotifier extends _$FavoritesNotifier {
     ref.invalidateSelf();
     ref.invalidate(isTeamFavoriteProvider(team.id));
     ref.invalidate(favoriteTeamsCountProvider);
+    ref.invalidate(favoriteTeamsAsTeamsProvider);
   }
 
   /// Remove team from favorites
@@ -68,5 +97,6 @@ class FavoritesNotifier extends _$FavoritesNotifier {
     ref.invalidateSelf();
     ref.invalidate(isTeamFavoriteProvider(teamId));
     ref.invalidate(favoriteTeamsCountProvider);
+    ref.invalidate(favoriteTeamsAsTeamsProvider);
   }
 }
