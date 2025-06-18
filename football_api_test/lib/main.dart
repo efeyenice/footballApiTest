@@ -36,10 +36,7 @@ class FootballApp extends ConsumerWidget {
 final _router = GoRouter(
   initialLocation: '/',
   routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const TeamsListScreen(),
-    ),
+    GoRoute(path: '/', builder: (context, state) => const TeamsListScreen()),
     GoRoute(
       path: '/team/:teamId',
       builder: (context, state) {
@@ -91,18 +88,14 @@ class TeamsListScreen extends StatelessWidget {
 
 class TeamDetailScreen extends StatelessWidget {
   final String teamId;
-  
+
   const TeamDetailScreen({super.key, required this.teamId});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Team Details'),
-      ),
-      body: Center(
-        child: Text('Team ID: $teamId'),
-      ),
+      appBar: AppBar(title: const Text('Team Details')),
+      body: Center(child: Text('Team ID: $teamId')),
     );
   }
 }
@@ -113,12 +106,8 @@ class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Favorite Teams'),
-      ),
-      body: const Center(
-        child: Text('No favorite teams yet'),
-      ),
+      appBar: AppBar(title: const Text('Favorite Teams')),
+      body: const Center(child: Text('No favorite teams yet')),
     );
   }
 }
