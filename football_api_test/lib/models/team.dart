@@ -1,6 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'area.dart';
 import 'competition.dart';
+import 'coach.dart';
+import 'player.dart';
 
 part 'team.g.dart';
 
@@ -19,6 +21,9 @@ class Team {
   final Area area;
   final List<Competition> runningCompetitions;
   final String lastUpdated;
+  final Coach? coach;
+  final List<Player>? squad;
+  final List<dynamic>? staff;
 
   const Team({
     required this.id,
@@ -34,6 +39,9 @@ class Team {
     required this.area,
     required this.runningCompetitions,
     required this.lastUpdated,
+    this.coach,
+    this.squad,
+    this.staff,
   });
 
   factory Team.fromJson(Map<String, dynamic> json) => _$TeamFromJson(json);

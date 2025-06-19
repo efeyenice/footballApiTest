@@ -22,6 +22,13 @@ Team _$TeamFromJson(Map<String, dynamic> json) => Team(
       .map((e) => Competition.fromJson(e as Map<String, dynamic>))
       .toList(),
   lastUpdated: json['lastUpdated'] as String,
+  coach: json['coach'] == null
+      ? null
+      : Coach.fromJson(json['coach'] as Map<String, dynamic>),
+  squad: (json['squad'] as List<dynamic>?)
+      ?.map((e) => Player.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  staff: json['staff'] as List<dynamic>?,
 );
 
 Map<String, dynamic> _$TeamToJson(Team instance) => <String, dynamic>{
@@ -38,4 +45,7 @@ Map<String, dynamic> _$TeamToJson(Team instance) => <String, dynamic>{
   'area': instance.area,
   'runningCompetitions': instance.runningCompetitions,
   'lastUpdated': instance.lastUpdated,
+  'coach': instance.coach,
+  'squad': instance.squad,
+  'staff': instance.staff,
 };

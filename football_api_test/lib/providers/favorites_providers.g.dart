@@ -220,7 +220,7 @@ final favoriteTeamsCountProvider = AutoDisposeFutureProvider<int>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef FavoriteTeamsCountRef = AutoDisposeFutureProviderRef<int>;
-String _$favoritesNotifierHash() => r'5506dc830992824d424377ebf98d26c1c46cc0cb';
+String _$favoritesNotifierHash() => r'26e07f7bc6911cca742e1f0f075b088f92f0338c';
 
 /// Notifier for managing favorite teams state
 ///

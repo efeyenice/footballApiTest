@@ -25,24 +25,35 @@ class FootballApiService {
     final url = Uri.parse('$_baseUrl/competitions/$_premierLeagueCode/teams');
 
     try {
+      print('🔗 Making API call to: $url');
+      print('📋 Headers: $_headers');
+      
       final response = await _client.get(url, headers: _headers);
+      
+      print('📡 Response status: ${response.statusCode}');
+      print('📄 Response headers: ${response.headers}');
+      print('📝 Response body preview: ${response.body.substring(0, response.body.length > 200 ? 200 : response.body.length)}...');
 
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
         final teamsResponse = TeamsResponse.fromJson(jsonData);
+        print('✅ Successfully parsed ${teamsResponse.teams.length} teams');
         return teamsResponse.teams;
       } else if (response.statusCode == 429) {
         throw ApiException('Rate limit exceeded. Please try again later.');
       } else if (response.statusCode >= 400 && response.statusCode < 500) {
-        throw ApiException('Client error: ${response.statusCode}');
+        throw ApiException('Client error: ${response.statusCode} - ${response.body}');
       } else {
-        throw ApiException('Server error: ${response.statusCode}');
+        throw ApiException('Server error: ${response.statusCode} - ${response.body}');
       }
-    } on SocketException {
+    } on SocketException catch (e) {
+      print('🚫 Network error: $e');
       throw ApiException('No internet connection');
-    } on FormatException {
-      throw ApiException('Invalid response format');
+    } on FormatException catch (e) {
+      print('🚫 Format error: $e');
+      throw ApiException('Invalid response format - received HTML instead of JSON');
     } catch (e) {
+      print('🚫 Unexpected error: $e');
       if (e is ApiException) rethrow;
       throw ApiException('Unexpected error: ${e.toString()}');
     }
