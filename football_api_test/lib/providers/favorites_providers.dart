@@ -18,7 +18,7 @@ Future<List<FavoriteTeam>> favoriteTeams(ref) async {
 Future<List<Team>> favoriteTeamsAsTeams(ref) async {
   final favoriteTeams = await ref.watch(favoriteTeamsProvider.future);
   return favoriteTeams
-      .map(
+      .map<Team>(
         (favoriteTeam) => Team(
           id: favoriteTeam.id,
           name: favoriteTeam.name,
@@ -37,7 +37,7 @@ Future<List<Team>> favoriteTeamsAsTeams(ref) async {
             code: 'UNK',
             flag: '',
           ),
-          runningCompetitions: [], // Not applicable for favorites
+          runningCompetitions: const [], // Not applicable for favorites
           lastUpdated: DateTime.now().toIso8601String(),
         ),
       )
@@ -101,6 +101,21 @@ class FavoritesNotifier extends _$FavoritesNotifier {
     // Refresh providers
     ref.invalidateSelf();
     ref.invalidate(isTeamFavoriteProvider(teamId));
+    ref.invalidate(favoriteTeamsCountProvider);
+    ref.invalidate(favoriteTeamsAsTeamsProvider);
+  }
+
+  /// Clear all favorites
+  Future<void> clearAllFavorites() async {
+    final database = ref.read(appDatabaseProvider);
+    final allFavorites = await database.getAllFavoriteTeams();
+    
+    for (final favorite in allFavorites) {
+      await database.removeFavoriteTeam(favorite.id);
+    }
+
+    // Refresh providers
+    ref.invalidateSelf();
     ref.invalidate(favoriteTeamsCountProvider);
     ref.invalidate(favoriteTeamsAsTeamsProvider);
   }

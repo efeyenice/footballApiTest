@@ -61,9 +61,9 @@ Future<List<Team>> filteredAndSortedTeams(ref) async {
 
   // Sort teams based on sort order
   if (sortOrder == SortOrder.nameAsc) {
-    filteredTeams.sort((a, b) => a.name.compareTo(b.name));
+    filteredTeams.sort((Team a, Team b) => a.name.compareTo(b.name));
   } else {
-    filteredTeams.sort((a, b) => b.name.compareTo(a.name));
+    filteredTeams.sort((Team a, Team b) => b.name.compareTo(a.name));
   }
 
   return filteredTeams;

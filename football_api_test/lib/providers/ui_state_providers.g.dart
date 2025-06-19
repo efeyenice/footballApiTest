@@ -7,7 +7,7 @@ part of 'ui_state_providers.dart';
 // **************************************************************************
 
 String _$filteredAndSortedTeamsHash() =>
-    r'1170a4e54ab421640b2bb2a50302428e7fa13730';
+    r'97508944d62b70a8ee6270fd8b1476fc25fa26f3';
 
 /// Provider that combines teams with filtering and sorting
 ///

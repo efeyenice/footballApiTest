@@ -27,7 +27,7 @@ final favoriteTeamsProvider =
 // ignore: unused_element
 typedef FavoriteTeamsRef = AutoDisposeFutureProviderRef<List<FavoriteTeam>>;
 String _$favoriteTeamsAsTeamsHash() =>
-    r'f68ab49be2d57df902908e40cee0ceeaacf0b482';
+    r'05acafd902b302e3eea2d49c67650a336e5a8a5f';
 
 /// Provider that converts favorite teams to Team objects for UI
 ///
@@ -220,7 +220,7 @@ final favoriteTeamsCountProvider = AutoDisposeFutureProvider<int>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef FavoriteTeamsCountRef = AutoDisposeFutureProviderRef<int>;
-String _$favoritesNotifierHash() => r'26e07f7bc6911cca742e1f0f075b088f92f0338c';
+String _$favoritesNotifierHash() => r'dbd5686982c5c4dd2c319fa9b8869a15bc049ec9';
 
 /// Notifier for managing favorite teams state
 ///
