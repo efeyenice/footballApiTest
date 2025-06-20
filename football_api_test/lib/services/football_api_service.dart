@@ -6,8 +6,8 @@ import '../models/team.dart';
 import '../models/match.dart';
 
 class FootballApiService {
-  static const String _baseUrl = 'https://api.football-data.org/v4';
-  static const String _apiKey = '7d6d02ad9fdf4f4bb24e1b89dcd1efc2';
+  static const String _baseUrl = 'https://api.football-data.org/v4'; 
+  static const String _apiKey = '7d6d02ad9fdf4f4bb24e1b89dcd1efc2'; // It is free API key so need for .env file
   static const String _premierLeagueCode = 'PL';
 
   final http.Client _client;
