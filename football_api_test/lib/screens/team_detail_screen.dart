@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:go_router/go_router.dart';
 import '../models/team.dart';
 import '../models/match.dart';
 import '../providers/providers.dart';
@@ -45,20 +46,32 @@ class TeamDetailScreen extends ConsumerWidget {
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 8),
-              Text(
-                error.toString(),
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+              SelectableText.rich(
+                TextSpan(
+                  text: error.toString(),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
                 ),
+                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 16),
-              FilledButton.icon(
-                onPressed: () {
-                  ref.invalidate(teamByIdProvider(int.parse(teamId)));
-                },
-                icon: const Icon(Icons.refresh),
-                label: const Text('Retry'),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  OutlinedButton(
+                    onPressed: () => context.pop(),
+                    child: const Text('Go Back'),
+                  ),
+                  const SizedBox(width: 16),
+                  FilledButton.icon(
+                    onPressed: () {
+                      ref.invalidate(teamByIdProvider(int.parse(teamId)));
+                    },
+                    icon: const Icon(Icons.refresh),
+                    label: const Text('Retry'),
+                  ),
+                ],
               ),
             ],
           ),
