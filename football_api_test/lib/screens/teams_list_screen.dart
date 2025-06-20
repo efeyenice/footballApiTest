@@ -37,6 +37,7 @@ class _TeamsListScreenState extends ConsumerState<TeamsListScreen> {
     final viewMode = ref.watch(viewModeNotifierProvider);
     final sortOrder = ref.watch(sortOrderNotifierProvider);
     final favoriteCountAsync = ref.watch(favoriteTeamsCountProvider);
+    final searchText = ref.watch(searchTextNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -126,7 +127,7 @@ class _TeamsListScreenState extends ConsumerState<TeamsListScreen> {
               hintText: 'Search teams...',
               leading: const Icon(Icons.search),
               trailing: [
-                if (_searchController.text.isNotEmpty)
+                if (searchText.isNotEmpty)
                   IconButton(
                     icon: const Icon(Icons.clear),
                     onPressed: () {
@@ -138,7 +139,10 @@ class _TeamsListScreenState extends ConsumerState<TeamsListScreen> {
                   ),
               ],
               onChanged: (value) {
-                // Already handled by listener
+                // This ensures immediate updates even if listener doesn't fire
+                ref
+                    .read(searchTextNotifierProvider.notifier)
+                    .setSearchText(value);
               },
             ),
           ),
