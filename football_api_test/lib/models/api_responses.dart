@@ -1,37 +1,43 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'team.dart';
 import 'match.dart';
-import 'competition.dart';
-import 'season.dart';
 
-part 'api_responses.g.dart';
-
-@JsonSerializable()
+/// Simplified response wrapper for teams API call
 class TeamsResponse {
   final int count;
-  final Competition competition;
-  final Season season;
   final List<Team> teams;
 
   const TeamsResponse({
     required this.count,
-    required this.competition,
-    required this.season,
     required this.teams,
   });
 
-  factory TeamsResponse.fromJson(Map<String, dynamic> json) =>
-      _$TeamsResponseFromJson(json);
-  Map<String, dynamic> toJson() => _$TeamsResponseToJson(this);
+  /// Parse teams from API response
+  factory TeamsResponse.fromJson(Map<String, dynamic> json) {
+    final teamsJson = json['teams'] as List<dynamic>;
+    final teams = teamsJson
+        .map((teamJson) => Team.fromJson(teamJson as Map<String, dynamic>))
+        .toList();
+
+    return TeamsResponse(
+      count: json['count'] as int? ?? teams.length,
+      teams: teams,
+    );
+  }
 }
 
-@JsonSerializable()
+/// Simplified response wrapper for matches API call
 class MatchesResponse {
   final List<Match> matches;
 
   const MatchesResponse({required this.matches});
 
-  factory MatchesResponse.fromJson(Map<String, dynamic> json) =>
-      _$MatchesResponseFromJson(json);
-  Map<String, dynamic> toJson() => _$MatchesResponseToJson(this);
+  /// Parse matches from API response
+  factory MatchesResponse.fromJson(Map<String, dynamic> json) {
+    final matchesJson = json['matches'] as List<dynamic>;
+    final matches = matchesJson
+        .map((matchJson) => Match.fromJson(matchJson as Map<String, dynamic>))
+        .toList();
+
+    return MatchesResponse(matches: matches);
+  }
 }

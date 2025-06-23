@@ -1,29 +1,15 @@
-import 'package:json_annotation/json_annotation.dart';
-import 'area.dart';
-import 'competition.dart';
-import 'coach.dart';
-import 'player.dart';
-
-part 'team.g.dart';
-
-@JsonSerializable()
+/// Simplified Team model without code generation
 class Team {
   final int id;
   final String name;
   final String shortName;
-  final String tla;
-  final String crest;
-  final String? address;
-  final String? website;
+  final String tla;          // Three Letter Abbreviation
+  final String crest;        // Team logo URL
+  final String? venue;
   final int? founded;
   final String? clubColors;
-  final String? venue;
-  final Area area;
-  final List<Competition> runningCompetitions;
-  final String lastUpdated;
-  final Coach? coach;
-  final List<Player>? squad;
-  final List<dynamic>? staff;
+  final String? website;
+  final String? address;
 
   const Team({
     required this.id,
@@ -31,21 +17,44 @@ class Team {
     required this.shortName,
     required this.tla,
     required this.crest,
-    this.address,
-    this.website,
+    this.venue,
     this.founded,
     this.clubColors,
-    this.venue,
-    required this.area,
-    required this.runningCompetitions,
-    required this.lastUpdated,
-    this.coach,
-    this.squad,
-    this.staff,
+    this.website,
+    this.address,
   });
 
-  factory Team.fromJson(Map<String, dynamic> json) => _$TeamFromJson(json);
-  Map<String, dynamic> toJson() => _$TeamToJson(this);
+  /// Create Team from API JSON response
+  factory Team.fromJson(Map<String, dynamic> json) {
+    return Team(
+      id: json['id'] as int,
+      name: json['name'] as String,
+      shortName: json['shortName'] as String,
+      tla: json['tla'] as String,
+      crest: json['crest'] as String,
+      venue: json['venue'] as String?,
+      founded: json['founded'] as int?,
+      clubColors: json['clubColors'] as String?,
+      website: json['website'] as String?,
+      address: json['address'] as String?,
+    );
+  }
+
+  /// Convert Team to JSON (for database storage if needed)
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'shortName': shortName,
+      'tla': tla,
+      'crest': crest,
+      'venue': venue,
+      'founded': founded,
+      'clubColors': clubColors,
+      'website': website,
+      'address': address,
+    };
+  }
 
   @override
   bool operator ==(Object other) =>
