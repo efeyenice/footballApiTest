@@ -27,7 +27,7 @@ void main() {
     
     // Wait for the initial state to settle
     await tester.pump();
-    
+
     // Verify the favorites button is present.
     expect(find.byIcon(Icons.favorite), findsOneWidget);
 

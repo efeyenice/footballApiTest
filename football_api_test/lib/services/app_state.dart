@@ -35,6 +35,7 @@ class AppState with ChangeNotifier {
   final Map<int, Team> _teamCache = {};
   final Map<int, List<Match>> _upcomingMatchesCache = {};
   final Map<int, List<Match>> _finishedMatchesCache = {};
+  final Map<int, int> _matchesPlayedCache = {};
 
   // Favorites State
   List<FavoriteTeam> _favoriteTeams = [];
@@ -154,7 +155,7 @@ class AppState with ChangeNotifier {
   Future<List<Match>> getUpcomingMatches(int teamId) async {
     // Check cache first
     if (_upcomingMatchesCache.containsKey(teamId)) {
-      return _upcomingMatchesCache[teamId]!;
+      return _upcomingMatchesCache[teamId] ?? [];
     }
 
     try {
@@ -170,7 +171,7 @@ class AppState with ChangeNotifier {
   Future<List<Match>> getFinishedMatches(int teamId) async {
     // Check cache first
     if (_finishedMatchesCache.containsKey(teamId)) {
-      return _finishedMatchesCache[teamId]!;
+      return _finishedMatchesCache[teamId] ?? [];
     }
 
     try {
@@ -181,6 +182,36 @@ class AppState with ChangeNotifier {
       setError('Failed to load finished matches: $e');
       return [];
     }
+  }
+
+  Future<int> getMatchesPlayed(int teamId) async {
+    // Check cache first
+    if (_matchesPlayedCache.containsKey(teamId)) {
+      return _matchesPlayedCache[teamId] ?? 0;
+    }
+
+    try {
+      final matchesPlayed = await _apiService.getTeamMatchesPlayed(teamId);
+      _matchesPlayedCache[teamId] = matchesPlayed;
+      return matchesPlayed;
+    } catch (e) {
+      // Don't set global error for this, as it's not critical
+      // Just return 0 and cache it
+      _matchesPlayedCache[teamId] = 0;
+      return 0;
+    }
+  }
+
+  /// Get cached matches played count (returns null if not cached)
+  int? getCachedMatchesPlayed(int teamId) {
+    return _matchesPlayedCache[teamId];
+  }
+
+  /// Preload matches played for multiple teams
+  Future<void> preloadMatchesPlayed(List<Team> teams) async {
+    final futures = teams.map((team) => getMatchesPlayed(team.id));
+    await Future.wait(futures);
+    notifyListeners();
   }
 
   // Favorites Methods

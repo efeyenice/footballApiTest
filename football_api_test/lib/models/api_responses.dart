@@ -22,7 +22,7 @@ class TeamsResponse {
       count: json['count'] as int? ?? teams.length,
       teams: teams,
     );
-  }
+}
 }
 
 /// Simplified response wrapper for matches API call

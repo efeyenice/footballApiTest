@@ -153,37 +153,48 @@ class TeamCard extends StatelessWidget {
   }
 
   Widget _buildTeamInfo(ThemeData theme) {
-    // Show team founding year if available
-    if (team.founded != null) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.calendar_today, size: 16, color: theme.colorScheme.primary),
-          const SizedBox(width: 4),
-          Text(
-            'Founded ${team.founded}',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ],
-      );
-    }
-    
-    // Show TLA as fallback
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(Icons.sports_soccer, size: 16, color: theme.colorScheme.primary),
-        const SizedBox(width: 4),
-        Text(
-          team.tla,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
+    return Consumer<AppState>(
+      builder: (context, appState, child) {
+        final matchesPlayed = appState.getCachedMatchesPlayed(team.id);
+        
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Matches played info
+            if (matchesPlayed != null)
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.sports_soccer, size: 16, color: theme.colorScheme.primary),
+                  const SizedBox(width: 4),
+                  Text(
+                    '$matchesPlayed games played',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              )
+            else
+              // Show TLA as fallback while matches played data loads
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.sports_soccer, size: 16, color: theme.colorScheme.primary),
+                  const SizedBox(width: 4),
+                  Text(
+                    team.tla,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+          ],
+        );
+      },
     );
   }
 

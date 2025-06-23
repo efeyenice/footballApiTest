@@ -73,7 +73,7 @@ class _TeamDetailScreenState extends State<TeamDetailScreen> {
   @override
   Widget build(BuildContext context) {
     if (isLoadingTeam) {
-      return Scaffold(
+    return Scaffold(
         appBar: AppBar(),
         body: const Center(
           child: Column(
@@ -124,6 +124,51 @@ class _TeamDetailScreenState extends State<TeamDetailScreen> {
                     child: const Text('Go Back'),
                   ),
                   const SizedBox(width: 16),
+              FilledButton.icon(
+                onPressed: () {
+                      setState(() {
+                        isLoadingTeam = true;
+                        teamError = null;
+                      });
+                      _loadTeamData();
+                },
+                icon: const Icon(Icons.refresh),
+                label: const Text('Retry'),
+                  ),
+                ],
+              ),
+            ],
+        ),
+      ),
+    );
+  }
+
+    if (team == null) {
+      return Scaffold(
+        appBar: AppBar(),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.error_outline,
+                size: 64,
+                color: Theme.of(context).colorScheme.error,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Team not found',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  OutlinedButton(
+                    onPressed: () => context.pop(),
+                    child: const Text('Go Back'),
+                  ),
+                  const SizedBox(width: 16),
                   FilledButton.icon(
                     onPressed: () {
                       setState(() {
@@ -146,148 +191,148 @@ class _TeamDetailScreenState extends State<TeamDetailScreen> {
     return Consumer<AppState>(
       builder: (context, appState, child) {
         final isFavorite = appState.isTeamFavorite(team!.id);
-        
+
         return Scaffold(
           body: CustomScrollView(
-            slivers: [
-              // App bar with team crest and name
-              SliverAppBar(
-                expandedHeight: 200,
-                pinned: true,
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Text(
+      slivers: [
+        // App bar with team crest and name
+        SliverAppBar(
+          expandedHeight: 200,
+          pinned: true,
+          flexibleSpace: FlexibleSpaceBar(
+            title: Text(
                     team!.shortName,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      shadows: [
-                        Shadow(
-                          offset: Offset(0, 1),
-                          blurRadius: 3,
-                          color: Colors.black45,
-                        ),
-                      ],
-                    ),
-                  ),
-                  background: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Theme.of(context).colorScheme.primary,
-                          Theme.of(context).colorScheme.primaryContainer,
-                        ],
-                      ),
-                    ),
-                    child: Center(
-                      child: Container(
-                        width: 120,
-                        height: 120,
-                        margin: const EdgeInsets.only(bottom: 60),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.2),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Container(
-                            color: Colors.white,
-                            padding: const EdgeInsets.all(16),
-                            child: CachedNetworkImage(
-                              imageUrl: team!.crest,
-                              fit: BoxFit.contain,
-                              errorWidget: (context, url, error) => Icon(
-                                Icons.sports_soccer,
-                                size: 60,
-                                color: Colors.grey.shade400,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                actions: [
-                  // Favorite button
-                  IconButton(
-                    onPressed: () => appState.toggleFavorite(team!),
-                    icon: Icon(
-                      isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: isFavorite ? Colors.red : Colors.white,
-                    ),
-                    tooltip: isFavorite
-                        ? 'Remove from favorites'
-                        : 'Add to favorites',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                shadows: [
+                  Shadow(
+                    offset: Offset(0, 1),
+                    blurRadius: 3,
+                    color: Colors.black45,
                   ),
                 ],
               ),
-
-              // Team information
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Team name card
-                      Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                team!.name,
-                                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              _buildInfoRow(
-                                icon: Icons.location_on,
-                                label: 'Venue',
-                                value: team!.venue ?? 'Not available',
-                              ),
-                              const SizedBox(height: 8),
-                              _buildInfoRow(
-                                icon: Icons.calendar_today,
-                                label: 'Founded',
-                                value: team!.founded?.toString() ?? 'Not available',
-                              ),
-                              const SizedBox(height: 8),
-                              _buildInfoRow(
-                                icon: Icons.palette,
-                                label: 'Colors',
-                                value: team!.clubColors ?? 'Not available',
-                              ),
-                            ],
-                          ),
-                        ),
+            ),
+            background: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                          Theme.of(context).colorScheme.primary,
+                          Theme.of(context).colorScheme.primaryContainer,
+                  ],
+                ),
+              ),
+              child: Center(
+                child: Container(
+                  width: 120,
+                  height: 120,
+                  margin: const EdgeInsets.only(bottom: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.2),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
                       ),
-
-                      const SizedBox(height: 24),
-
-                      // Upcoming matches section
-                      Text(
-                        'Upcoming Matches',
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      _buildMatchesSection(),
                     ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Container(
+                      color: Colors.white,
+                      padding: const EdgeInsets.all(16),
+                      child: CachedNetworkImage(
+                              imageUrl: team!.crest,
+                        fit: BoxFit.contain,
+                        errorWidget: (context, url, error) => Icon(
+                          Icons.sports_soccer,
+                          size: 60,
+                          color: Colors.grey.shade400,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ],
+            ),
+          ),
+          actions: [
+            // Favorite button
+                  IconButton(
+                    onPressed: () => appState.toggleFavorite(team!),
+                icon: Icon(
+                  isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: isFavorite ? Colors.red : Colors.white,
+                ),
+                tooltip: isFavorite
+                    ? 'Remove from favorites'
+                    : 'Add to favorites',
+              ),
+          ],
+        ),
+
+        // Team information
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Team name card
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                                team!.name,
+                                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        _buildInfoRow(
+                          icon: Icons.location_on,
+                          label: 'Venue',
+                                value: team!.venue ?? 'Not available',
+                        ),
+                        const SizedBox(height: 8),
+                        _buildInfoRow(
+                          icon: Icons.calendar_today,
+                          label: 'Founded',
+                                value: team!.founded?.toString() ?? 'Not available',
+                        ),
+                        const SizedBox(height: 8),
+                        _buildInfoRow(
+                          icon: Icons.palette,
+                          label: 'Colors',
+                                value: team!.clubColors ?? 'Not available',
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                // Upcoming matches section
+                Text(
+                  'Upcoming Matches',
+                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                      _buildMatchesSection(),
+                        ],
+                      ),
+                  ),
+                ),
+              ],
           ),
         );
       },

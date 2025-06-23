@@ -15,26 +15,26 @@ class FavoritesScreen extends StatelessWidget {
         final favoriteTeams = appState.favoriteTeamsAsTeams;
         final favoriteCount = appState.favoritesCount;
 
-        return Scaffold(
-          appBar: AppBar(
+    return Scaffold(
+      appBar: AppBar(
             title: Text('Favorites ($favoriteCount)'),
-            actions: [
+        actions: [
               if (favoriteCount > 0)
                 PopupMenuButton(
-                  icon: const Icon(Icons.more_vert),
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
+                    icon: const Icon(Icons.more_vert),
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
                       onTap: () => _showClearAllDialog(context, appState),
-                      child: const Row(
-                        children: [
-                          Icon(Icons.clear_all),
-                          SizedBox(width: 12),
-                          Text('Clear all favorites'),
-                        ],
+                        child: const Row(
+                          children: [
+                            Icon(Icons.clear_all),
+                            SizedBox(width: 12),
+                            Text('Clear all favorites'),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+              ),
             ],
           ),
           body: _buildContent(context, favoriteTeams),

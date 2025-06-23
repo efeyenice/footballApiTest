@@ -14,6 +14,7 @@ class TeamsListScreen extends StatefulWidget {
 
 class _TeamsListScreenState extends State<TeamsListScreen> {
   final TextEditingController _searchController = TextEditingController();
+  bool _isLoadingMatchesPlayed = false;
 
   @override
   void initState() {
@@ -21,6 +22,37 @@ class _TeamsListScreenState extends State<TeamsListScreen> {
     _searchController.addListener(() {
       context.read<AppState>().setSearchText(_searchController.text);
     });
+    
+    // Load matches played data for teams when widget is initialized
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadMatchesPlayedForVisibleTeams();
+    });
+  }
+
+  Future<void> _loadMatchesPlayedForVisibleTeams() async {
+    final appState = context.read<AppState>();
+    if (appState.teams.isNotEmpty && !_isLoadingMatchesPlayed) {
+      setState(() {
+        _isLoadingMatchesPlayed = true;
+      });
+      
+      try {
+        // Load matches played for visible teams (limit to first 20 for performance)
+        final teamsToLoad = appState.teams.take(20).toList();
+        if (teamsToLoad.isNotEmpty) {
+          await appState.preloadMatchesPlayed(teamsToLoad);
+        }
+      } catch (e) {
+        // Silently fail - matches played is not critical data
+        debugPrint('Failed to load matches played: $e');
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isLoadingMatchesPlayed = false;
+          });
+        }
+      }
+    }
   }
 
   @override
@@ -33,6 +65,16 @@ class _TeamsListScreenState extends State<TeamsListScreen> {
   Widget build(BuildContext context) {
     return Consumer<AppState>(
       builder: (context, appState, child) {
+        // Load matches played when teams change
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted && 
+              appState.teams.isNotEmpty && 
+              !appState.isLoading && 
+              appState.errorMessage == null) {
+            _loadMatchesPlayedForVisibleTeams();
+          }
+        });
+        
         return Scaffold(
           appBar: AppBar(
             title: const Text('Premier League Teams'),
@@ -140,13 +182,6 @@ class _TeamsListScreenState extends State<TeamsListScreen> {
                     ),
                   ),
                 ),
-                child: Text(
-                  'Football data provided by the Football-Data.org API',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
               ),
             ],
           ),
@@ -184,7 +219,10 @@ class _TeamsListScreenState extends State<TeamsListScreen> {
             ),
             const SizedBox(height: 16),
             FilledButton.icon(
-              onPressed: () => appState.loadTeams(),
+              onPressed: () async {
+                await appState.loadTeams();
+                _loadMatchesPlayedForVisibleTeams();
+              },
               icon: const Icon(Icons.refresh),
               label: const Text('Retry'),
             ),
