@@ -1,99 +1,49 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../models/team.dart';
-import '../providers/providers.dart';
+import '../services/app_state.dart';
 import '../widgets/team_card.dart';
 
-class FavoritesScreen extends ConsumerWidget {
+class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final favoriteTeamsAsync = ref.watch(favoriteTeamsAsTeamsProvider);
-    final favoriteCountAsync = ref.watch(favoriteTeamsCountProvider);
+  Widget build(BuildContext context) {
+    return Consumer<AppState>(
+      builder: (context, appState, child) {
+        final favoriteTeams = appState.favoriteTeamsAsTeams;
+        final favoriteCount = appState.favoritesCount;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: favoriteCountAsync.when(
-          data: (count) => Text('Favorites ($count)'),
-          loading: () => const Text('Favorites'),
-          error: (_, __) => const Text('Favorites'),
-        ),
-        actions: [
-          favoriteCountAsync.when(
-            data: (count) => count > 0
-                ? PopupMenuButton(
-                    icon: const Icon(Icons.more_vert),
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        onTap: () => _showClearAllDialog(context, ref),
-                        child: const Row(
-                          children: [
-                            Icon(Icons.clear_all),
-                            SizedBox(width: 12),
-                            Text('Clear all favorites'),
-                          ],
-                        ),
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Favorites ($favoriteCount)'),
+            actions: [
+              if (favoriteCount > 0)
+                PopupMenuButton(
+                  icon: const Icon(Icons.more_vert),
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      onTap: () => _showClearAllDialog(context, appState),
+                      child: const Row(
+                        children: [
+                          Icon(Icons.clear_all),
+                          SizedBox(width: 12),
+                          Text('Clear all favorites'),
+                        ],
                       ),
-                    ],
-                  )
-                : const SizedBox.shrink(),
-            loading: () => const SizedBox.shrink(),
-            error: (_, __) => const SizedBox.shrink(),
-          ),
-        ],
-      ),
-      body: favoriteTeamsAsync.when(
-        data: (teams) => _buildFavoritesList(context, teams),
-        loading: () => const Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircularProgressIndicator(),
-              SizedBox(height: 16),
-              Text('Loading your favorites...'),
-            ],
-          ),
-        ),
-        error: (error, stackTrace) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.error_outline,
-                size: 64,
-                color: Theme.of(context).colorScheme.error,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Failed to load favorites',
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                error.toString(),
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(height: 16),
-              FilledButton.icon(
-                onPressed: () {
-                  ref.invalidate(favoriteTeamsAsTeamsProvider);
-                },
-                icon: const Icon(Icons.refresh),
-                label: const Text('Retry'),
-              ),
             ],
           ),
-        ),
-      ),
+          body: _buildContent(context, favoriteTeams),
+        );
+      },
     );
   }
 
-  Widget _buildFavoritesList(BuildContext context, List<Team> teams) {
+  Widget _buildContent(BuildContext context, List<Team> teams) {
     if (teams.isEmpty) {
       return Center(
         child: Column(
@@ -221,7 +171,7 @@ class FavoritesScreen extends ConsumerWidget {
     );
   }
 
-  void _showClearAllDialog(BuildContext context, WidgetRef ref) {
+  void _showClearAllDialog(BuildContext context, AppState appState) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -250,17 +200,7 @@ class FavoritesScreen extends ConsumerWidget {
                 }
 
                 try {
-                  final favoritesNotifier = ref.read(
-                    favoritesNotifierProvider.notifier,
-                  );
-                  final favoriteTeams = await ref.read(
-                    favoriteTeamsAsTeamsProvider.future,
-                  );
-
-                  // Remove all teams one by one
-                  for (final team in favoriteTeams) {
-                    await favoritesNotifier.removeFavorite(team.id);
-                  }
+                  await appState.clearAllFavorites();
 
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(

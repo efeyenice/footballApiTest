@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../models/team.dart';
-import '../providers/providers.dart';
+import '../services/app_state.dart';
 
-class TeamCard extends ConsumerWidget {
+class TeamCard extends StatelessWidget {
   final Team team;
   final bool isGridView;
   final VoidCallback? onTap;
@@ -17,44 +17,35 @@ class TeamCard extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isFavoriteAsync = ref.watch(isTeamFavoriteProvider(team.id));
-    final matchesPlayedAsync = ref.watch(teamMatchesPlayedProvider(team.id));
-
-    return Card(
-      elevation: 2,
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: isGridView
-              ? _buildGridLayout(
-                  context,
-                  theme,
-                  isFavoriteAsync,
-                  matchesPlayedAsync,
-                  ref,
-                )
-              : _buildListLayout(
-                  context,
-                  theme,
-                  isFavoriteAsync,
-                  matchesPlayedAsync,
-                  ref,
-                ),
-        ),
-      ),
+    
+    return Consumer<AppState>(
+      builder: (context, appState, child) {
+        final isFavorite = appState.isTeamFavorite(team.id);
+        
+        return Card(
+          elevation: 2,
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: isGridView
+                  ? _buildGridLayout(context, theme, isFavorite, appState)
+                  : _buildListLayout(context, theme, isFavorite, appState),
+            ),
+          ),
+        );
+      },
     );
   }
 
   Widget _buildListLayout(
     BuildContext context,
     ThemeData theme,
-    AsyncValue<bool> isFavoriteAsync,
-    AsyncValue<int> matchesPlayedAsync,
-    WidgetRef ref,
+    bool isFavorite,
+    AppState appState,
   ) {
     return Row(
       children: [
@@ -83,13 +74,13 @@ class TeamCard extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              _buildMatchesPlayed(matchesPlayedAsync, theme),
+              _buildTeamInfo(theme),
             ],
           ),
         ),
 
         // Favorite button
-        _buildFavoriteButton(context, isFavoriteAsync, ref),
+        _buildFavoriteButton(context, isFavorite, appState),
       ],
     );
   }
@@ -97,9 +88,8 @@ class TeamCard extends ConsumerWidget {
   Widget _buildGridLayout(
     BuildContext context,
     ThemeData theme,
-    AsyncValue<bool> isFavoriteAsync,
-    AsyncValue<int> matchesPlayedAsync,
-    WidgetRef ref,
+    bool isFavorite,
+    AppState appState,
   ) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -120,12 +110,12 @@ class TeamCard extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
 
-        // Matches played
-        _buildMatchesPlayed(matchesPlayedAsync, theme),
+        // Team info
+        _buildTeamInfo(theme),
         const SizedBox(height: 8),
 
         // Favorite button
-        _buildFavoriteButton(context, isFavoriteAsync, ref),
+        _buildFavoriteButton(context, isFavorite, appState),
       ],
     );
   }
@@ -162,97 +152,55 @@ class TeamCard extends ConsumerWidget {
     );
   }
 
-  Widget _buildMatchesPlayed(
-    AsyncValue<int> matchesPlayedAsync,
-    ThemeData theme,
-  ) {
-    return matchesPlayedAsync.when(
-      data: (matchesPlayed) => Row(
+  Widget _buildTeamInfo(ThemeData theme) {
+    // Show team founding year if available
+    if (team.founded != null) {
+      return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.sports_soccer, size: 16, color: theme.colorScheme.primary),
+          Icon(Icons.calendar_today, size: 16, color: theme.colorScheme.primary),
           const SizedBox(width: 4),
           Text(
-            '$matchesPlayed matches',
+            'Founded ${team.founded}',
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
         ],
-      ),
-      loading: () => Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            width: 12,
-            height: 12,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              color: theme.colorScheme.primary,
-            ),
+      );
+    }
+    
+    // Show TLA as fallback
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.sports_soccer, size: 16, color: theme.colorScheme.primary),
+        const SizedBox(width: 4),
+        Text(
+          team.tla,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+            fontWeight: FontWeight.bold,
           ),
-          const SizedBox(width: 4),
-          Text(
-            'Loading...',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ],
-      ),
-      error: (_, __) => Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.error_outline, size: 16, color: theme.colorScheme.error),
-          const SizedBox(width: 4),
-          Text(
-            'Error',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.error,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   Widget _buildFavoriteButton(
     BuildContext context,
-    AsyncValue<bool> isFavoriteAsync,
-    WidgetRef ref,
+    bool isFavorite,
+    AppState appState,
   ) {
-    return isFavoriteAsync.when(
-      data: (isFavorite) => IconButton(
-        onPressed: () async {
-          final favoritesNotifier = ref.read(
-            favoritesNotifierProvider.notifier,
-          );
-          await favoritesNotifier.toggleFavorite(team);
-        },
-        icon: Icon(
-          isFavorite ? Icons.favorite : Icons.favorite_border,
-          color: isFavorite ? Colors.red : null,
-        ),
-        tooltip: isFavorite ? 'Remove from favorites' : 'Add to favorites',
+    return IconButton(
+      onPressed: () async {
+        await appState.toggleFavorite(team);
+      },
+      icon: Icon(
+        isFavorite ? Icons.favorite : Icons.favorite_border,
+        color: isFavorite ? Colors.red : null,
       ),
-      loading: () => const SizedBox(
-        width: 48,
-        height: 48,
-        child: Center(
-          child: SizedBox(
-            width: 20,
-            height: 20,
-            child: CircularProgressIndicator(strokeWidth: 2),
-          ),
-        ),
-      ),
-      error: (_, __) => IconButton(
-        onPressed: null,
-        icon: Icon(
-          Icons.error_outline,
-          color: Theme.of(context).colorScheme.error,
-        ),
-      ),
+      tooltip: isFavorite ? 'Remove from favorites' : 'Add to favorites',
     );
   }
 }
