@@ -49,9 +49,9 @@ class TeamDetailScreen extends ConsumerWidget {
               SelectableText.rich(
                 TextSpan(
                   text: error.toString(),
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Theme.of(context).colorScheme.error,
-                      ),
+                ),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -64,12 +64,12 @@ class TeamDetailScreen extends ConsumerWidget {
                     child: const Text('Go Back'),
                   ),
                   const SizedBox(width: 16),
-                  FilledButton.icon(
-                    onPressed: () {
-                      ref.invalidate(teamByIdProvider(int.parse(teamId)));
-                    },
-                    icon: const Icon(Icons.refresh),
-                    label: const Text('Retry'),
+              FilledButton.icon(
+                onPressed: () {
+                  ref.invalidate(teamByIdProvider(int.parse(teamId)));
+                },
+                icon: const Icon(Icons.refresh),
+                label: const Text('Retry'),
                   ),
                 ],
               ),

@@ -1,5 +1,5 @@
 name: football_api_test
-description: "A new Flutter project."
+description: "A simplified Flutter football app with clean architecture."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -31,16 +31,12 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  # Essential UI
   cupertino_icons: ^1.0.8
-
-  # UI
   cached_network_image: ^3.3.1
   
-  # State Management
-  flutter_riverpod: ^2.4.10
-  riverpod_annotation: ^2.3.4
+  # Simple State Management (replacing Riverpod)
+  provider: ^6.1.1
   
   # Navigation
   go_router: ^14.2.7
@@ -48,15 +44,9 @@ dependencies:
   # API & HTTP
   http: ^1.2.2
   
-  # Database
-  drift: ^2.18.0
-  sqlite3_flutter_libs: ^0.5.20
-  sqlite3: ^2.4.6
-  path_provider: ^2.1.4
+  # Database (Room-like functionality, replacing Drift)
+  sqflite: ^2.3.0
   path: ^1.9.0
-  
-  # JSON Serialization
-  json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:
@@ -68,12 +58,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
-  
-  # Code Generation
-  build_runner: ^2.4.9
-  drift_dev: ^2.18.0
-  riverpod_generator: ^2.3.11
-  json_serializable: ^6.8.0
   
   # Testing
   mockito: ^5.4.4
@@ -120,6 +104,6 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
 
-  # Add assets folder for future use
+  # Assets folder for future use
   assets:
     - assets/images/
