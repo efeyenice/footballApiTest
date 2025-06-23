@@ -86,8 +86,8 @@ void main() {
           score: const Score(
             winner: null,
             duration: 'REGULAR',
-            fullTime: null,
-            halfTime: null,
+            fullTime: ScoreTime(home: null, away: null),
+            halfTime: ScoreTime(home: null, away: null),
           ),
           homeTeam: const TeamSummary(id: 57, name: 'Arsenal FC', shortName: 'Arsenal', tla: 'ARS', crest: 'crest1'),
           awayTeam: const TeamSummary(id: 61, name: 'Chelsea FC', shortName: 'Chelsea', tla: 'CHE', crest: 'crest2'),
@@ -189,7 +189,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Loading upcoming matches...'), findsOneWidget);
-      expect(find.byType(CircularProgressIndicator), findsAtLeastOneWidget);
+      expect(find.byType(CircularProgressIndicator), findsWidgets);
     });
 
     testWidgets('displays matches error state', (WidgetTester tester) async {
@@ -217,7 +217,7 @@ void main() {
 
       expect(find.text('Failed to load matches'), findsOneWidget);
       expect(find.text('Please try again later'), findsOneWidget);
-      expect(find.byIcon(Icons.error_outline), findsAtLeastOneWidget);
+      expect(find.byIcon(Icons.error_outline), findsWidgets);
     });
 
     testWidgets('favorite button works correctly', (WidgetTester tester) async {
@@ -281,7 +281,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Should show 'Not available' for missing fields
-      expect(find.text('Not available'), findsAtLeastOneWidget);
+      expect(find.text('Not available'), findsWidgets);
       
       // Should not show website section if not provided
       expect(find.text('Website'), findsNothing);
